@@ -102,8 +102,8 @@ void testPointer()
 	cout << "c = " << c << endl;
 
 }
- void testStruct()
- {
+void testStruct()
+{
 
- 
- }
+
+}
