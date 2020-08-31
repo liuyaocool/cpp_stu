@@ -249,13 +249,7 @@ void testStruct()
 	// ========================================= const ===============================================
 	printStudentc(&s2);
 
-
-
-
-
-
 }
-
 
 void printStudent(struct Student s1)
 {
