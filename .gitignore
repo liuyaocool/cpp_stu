@@ -31,5 +31,11 @@
 *.out
 *.app
 
-.idea
+# vs
 .vs
+*.sln
+*.vcxproj
+*.filters
+*.user
+
+.idea
