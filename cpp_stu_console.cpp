@@ -11,8 +11,7 @@ int add(int n1, int n2);
 
 int main()
 {
-	// 导入源码 https://blog.csdn.net/GoJawee/article/details/61209111?utm_source=blogxgwz7
-	// 进度： https://www.bilibili.com/video/BV1et411b73Z?p=95
+	// 进度： https://www.bilibili.com/video/BV1et411b73Z?p=111
 
 	//mainHello();
 
@@ -22,14 +21,22 @@ int main()
 
 	// 全局区
 	//testGlobal();
-
 	//栈区
 	//testStack();
 	// 堆区
 	//testHeap();
 
 	// 引用
-	testRelative();
+	//testRelative();
+
+	// 函数参数
+	//testDefParam();
+
+	//函数重载
+	//testFuncRepeat();
+
+	//类
+	testClass();
 
 
 	int sum = add(12, 25);

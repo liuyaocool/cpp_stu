@@ -1,4 +1,5 @@
 #include "core1.h"
+#include "person.h"
 
 
 /*
@@ -179,4 +180,115 @@ void testRelative()
 	cout << "aa: " << aa << endl;
 
 }
+
+
+/*
+	函数可以有默认参数 必须从右向左设置
+	声明和实现中只能有一个位置加默认参数
+*/
+void funcDefParam(int a, int b = 10, int c = 20);
+// 占位参数 占位参数也可以有默认值
+void funcSeatParam(int a, int /* = 10 */ )
+{
+	cout << "funcSeatParam: " << a << endl;
+};
+void testDefParam()
+{
+	// 调用默认参数函数
+	funcDefParam(20, 30, 40);
+	funcDefParam(20, 30);
+	funcDefParam(20);
+	funcSeatParam(3, 6);
+};
+void funcDefParam(int a, int b, int c)
+{
+	int s = a + b + c;
+	cout << "funcDefParam: " << s << endl;
+};
+
+
+/*
+	函数重载 函数名相同
+	条件
+		同一作用域下
+		名称相同
+		参数类型、个数、顺序不同
+		返回值不作为重载条件
+	坑 
+		引用作为重载条件
+		默认参数
+
+*/
+void funcRepeat()
+{
+	cout << "调用 funcRepeat()" << endl;
+}
+void funcRepeat(double a)
+{
+	cout << "调用 funcRepeat(double a)" << endl;
+}
+void funcRepeat2(int& a) // → int& a = 变量;（合法）\ int& a = 10; (不合法)
+{
+	cout << "调用 funcRepeat(int& a)" << endl;
+}
+void funcRepeat2(const int& a) // → const int& a = 10; (合法) const-编译器创建临时内存空间
+{
+	cout << "调用 funcRepeat(const int& a)" << endl;
+}
+void testFuncRepeat()
+{
+	int a = 12;
+	funcRepeat2(a);
+	funcRepeat2(10); 
+}
+
+// 类
+void funcPersonParam(Person p) { // 参数调用拷贝构造函数
+
+}
+Person funcPersonRet() {
+	Person p = Person("方法返回对象");
+	return p;// 调用拷贝构造函数
+}
+void testClass()
+{
+	Person p1; // 在栈上的数据 方法执行完毕 自动释放
+	p1.name = "张三";
+	p1.showPerson();
+
+	// 括号法 调用默认构造 不要加()
+	Person p2(); // 会认为是函数声明
+	Person p3("李四");
+	p3.showPerson();
+
+	//显示法
+	Person p4 = Person("王五");
+	Person("赵云"); // 匿名对象 行执行结束后 立即回收
+	//Person(p3); // → Person p3;  会重复定义
+
+	//隐式转换法
+	//Person p5 = "张飞";
+	Person p6 = 28; // → Person p6 = Person(28);
+
+	// 值传递 方法会调用拷贝构造函数
+	funcPersonParam(p4);
+	Person pret = funcPersonRet();
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
