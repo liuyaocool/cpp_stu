@@ -242,7 +242,7 @@ void testFuncRepeat()
 	funcRepeat2(10); 
 }
 
-// 类
+// ================================================== 类 ===================================
 void funcPersonParam(Person p) { // 参数调用拷贝构造函数
 
 }
@@ -274,10 +274,167 @@ void testClass()
 	funcPersonParam(p4);
 	Person pret = funcPersonRet();
 
+	// 调用静态成员
+	p1.staticFunc();
+	Person::staticFunc();
 
+	// 空指针可以访问成员函数 需注意showPerson方法实现
+	Person* p7 = NULL;
+	p7->showClassName();
+	p7->showPerson();
+
+	// 常对象
+	const Person cp1;
+	//cp1.name = "ccc"; // 普通变量 不可修改
+	cp1.ma = 23; // 特殊变量 可修改
+	//cp1.showClassName(); // 不能调用普通函数 因为普通函数可以修改普通变量
+	cp1.constfunc();
+
+	// 友元 可以访问私有属性
+	Person p8("友元", 18);
+	// 全局函数做友元
+	goodGay(&p8);
+	// 类做友元
+	GoodGay gg;
+	gg.visit();
+	// 成员变量做友元
+	GoodGirl girl;
+	girl.visit();
+	girl.novisit();
+}
+void goodGay(Person* p)
+{
+	cout << p->name << " " << p->age << "岁" << endl;
 }
 
+// ================================================== 运算符重载 ===================================
+class Yunsuan
+{
+public:
+	
+	int a;
+	int b;
+	int* c; // 数据开辟到堆区
+	~Yunsuan() 
+	{
+		if (this->c != NULL) {
+			delete c;
+			c = NULL;
+		}
+	}
+	Yunsuan() {}
+	Yunsuan(int ca, int cb, int cc):a(ca),b(cb) {
+		c = new int(cc);
+	}
+	// 成员函数重载+号  --y1 + y2; // → y1.operator+(y2);
+	/*Yunsuan operator+(Yunsuan& yun)
+	{
+		Yunsuan temp;
+		temp.a = this->a + yun.a;
+		temp.b = this->b + yun.b;
+		return temp;
+	}*/
+	// 重载++ 
+	// ++Yunsuan
+	Yunsuan& operator++() // 为了++（++Yunsun） 此处返回引用
+	{
+		this->b++;
+		return *this;
+	}
+	// Yunsuan++
+	Yunsuan operator++(int) // int占位参数 区分前置后置 返回的是值
+	{
+		Yunsuan temp = *this; // 先记录当前结果
+		this->b++; // 执行++操作
+		return temp; // 返回操作前结果
+	}
+	// 重载 赋值符 =
+	Yunsuan& operator=(Yunsuan& yun)
+	{
+		// 编译器提供的浅拷贝 =赋值的内容为浅拷贝，这里是赋值指针 
+		// 则两个对象指针相同， 指向同一块内存 在释放c时会出现重复释放的错误
+		//c = yun.c;
+		// 如果本对象 有数据在堆区， 先释放干净 再深拷贝
+		if (c != NULL)
+		{
+			delete c;
+			c = NULL;
+		}
+		c = new int(*yun.c); // 深拷贝
+		return *this;
+	}
+	// 关系运算符 == != 。。。
+	bool operator==(Yunsuan& yun)
+	{
+		if (this->a != yun.a || this->b != yun.b)
+		{
+			return false;
+		}
+		return true;
+	}
+	// 函数调用运算符重载 () 又称仿函数
+	void operator()(string str)
+	{
+		cout << str << endl;
+	}
+	int operator()(int a, int b)
+	{
+		return a + b;
+	}
 
+	void show()
+	{
+		cout << "a: " << a << "  b: " << b << "  c: " << c << endl;
+	}
+};
+// 全局函数重载+号 
+Yunsuan operator+(Yunsuan& y1, Yunsuan& y2)
+{
+	Yunsuan temp;
+	temp.a = y1.a + y2.a;
+	temp.b = y1.b + y2.b;
+	return temp;
+}
+// 重载<< 成员函数 只能实现 p<<cout      -- 链式编程思想
+ostream& operator<<(ostream& cout, Yunsuan yun) // Yunsuan& yun
+{
+	yun.show();
+	return cout;
+}
+void testYunSuanFu()
+{
+	Yunsuan y1(11, 22, 18);
+	Yunsuan y2(33, 44, 19);
+	
+	Yunsuan y3 = y1 + y2;
+
+	cout << "y1+y2" << y3 << " " << endl;
+	cout << ++y3 << endl;
+	cout << "++yun " << y3 << endl;
+	cout << y3++ << endl;
+	cout << "yun++ " << y3 << endl;
+
+	Yunsuan y4(55, 66, 17);
+	//y2 = y1;
+	y4 = y2 = y1; // 需要返回引用
+
+	Yunsuan y5(12, 23, 45);
+	Yunsuan y6(12, 33, 46);
+	if (y5 == y6) 
+	{
+		cout << "y5 == y6" << endl;
+	}
+	else
+	{
+		cout << "y5 != y6" << endl;
+	}
+
+	y1("重载（）--> 仿函数调用");
+	cout << "重载（）--> operator()(int a, int b) <-- 12, 13" << y1(12, 13) << endl;
+
+	//匿名函数对象
+	Yunsuan(1,2,3)("重载（）--> 匿名函数调用");
+};
 
 
 

@@ -11,3 +11,4 @@ void testRelative();
 void testDefParam();
 void testFuncRepeat();
 void testClass();
+void testYunSuanFu();
